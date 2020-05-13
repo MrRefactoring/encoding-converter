@@ -5,12 +5,13 @@ import * as encoding from 'encoding';
 const from = 'cp1251';
 const to = 'utf-8';
 
-const inputDir = path.resolve(__dirname, 'input');
-const outputDir = path.resolve(__dirname, 'output');
+const inputDir = path.resolve(__dirname, '..', 'input');
+const outputDir = path.resolve(__dirname, '..', 'output');
 
 fs.mkdirSync(outputDir, { recursive: true });
 
-const filesForConverting = fs.readdirSync(inputDir);
+const filesForConverting = fs.readdirSync(inputDir)
+  .filter((filename) => !!path.extname(filename));
 
 filesForConverting.forEach((filename) => {
   const fullInputFilePath = path.join(inputDir, filename);
@@ -19,5 +20,5 @@ filesForConverting.forEach((filename) => {
   const fileBuffer = fs.readFileSync(fullInputFilePath);
   const outputBuffer = encoding.convert(fileBuffer, to, from);
 
-  fs.writeFileSync(outputBuffer, fullOutputFilePath);
+  fs.writeFileSync(fullOutputFilePath, outputBuffer);
 });

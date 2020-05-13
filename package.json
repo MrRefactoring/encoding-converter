@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "compile": "tsc",
-    "convert": ""
+    "convert": "node out/converter.js"
   },
   "devDependencies": {
     "@types/node": "^14.0.1",

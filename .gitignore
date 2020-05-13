@@ -1,4 +1,8 @@
 node_modules/
 out/
 
+output/**
+input/**
+!input/.gitkeep
+
 yarn-error.log
