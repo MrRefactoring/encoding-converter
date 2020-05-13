@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "lib": [
+      "ES2018"
+    ],
+    "outDir": "out",
+    "strict": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "src/types"
+    ]
+  }
+}
