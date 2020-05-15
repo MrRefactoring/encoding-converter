@@ -5,20 +5,27 @@ import * as encoding from 'encoding';
 const from = 'cp1251';
 const to = 'utf-8';
 
-const inputDir = path.resolve(__dirname, '..', 'input');
-const outputDir = path.resolve(__dirname, '..', 'output');
+function convert(inputDirectory: string, outputDirectory: string): void {
+  fs.mkdirSync(outputDirectory, { recursive: true });
 
-fs.mkdirSync(outputDir, { recursive: true });
+  fs.readdirSync(inputDirectory)
+    .filter((filename) => path.extname(filename) !== '.DS_Store')
+    .forEach((filename) => {
+      const inputPath = path.join(inputDirectory, filename);
+      const outputPath = path.join(outputDirectory, filename);
 
-const filesForConverting = fs.readdirSync(inputDir)
-  .filter((filename) => !!path.extname(filename));
+      if (fs.statSync(inputPath).isDirectory()) {
+        return convert(inputPath, outputPath);
+      }
 
-filesForConverting.forEach((filename) => {
-  const fullInputFilePath = path.join(inputDir, filename);
-  const fullOutputFilePath = path.join(outputDir, filename);
+      const fileBuffer = fs.readFileSync(inputPath);
+      const outputBuffer = encoding.convert(fileBuffer, to, from);
 
-  const fileBuffer = fs.readFileSync(fullInputFilePath);
-  const outputBuffer = encoding.convert(fileBuffer, to, from);
+      fs.writeFileSync(outputPath, outputBuffer);
+    });
+}
 
-  fs.writeFileSync(fullOutputFilePath, outputBuffer);
-});
+const inputDirectory = path.resolve(__dirname, '..', 'input');
+const outputDirectory = path.resolve(__dirname, '..', 'output');
+
+convert(inputDirectory, outputDirectory);
